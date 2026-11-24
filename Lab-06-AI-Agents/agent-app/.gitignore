@@ -1,0 +1,7 @@
+rag_env/
+rag_test/
+chroma_db/
+__pycache__/
+.env
+credentials.json
+token.json

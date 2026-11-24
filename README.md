@@ -1,10 +1,5 @@
 # LLM Practical Portfolio
 
-Name: TMAD Thennakoon
-Student ID:33636/10965096
-Module: PUSL3205 Large Language Models and Generative AI
-Institution: NSBM Green University (University of Plymouth)
-
 ## Overview
 A short paragraph on what this portfolio covers, the skills you built, and the tools used.
 
