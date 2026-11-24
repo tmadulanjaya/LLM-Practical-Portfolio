@@ -21,7 +21,7 @@ Build, train and evaluate a small decoder-only Transformer (GPT style) on the Ti
 
 ## Notebook
 - GitHub: [Lab-03-Tiny-Transformer.ipynb](./notebooks/Lab-03.ipynb)
-- Kaggle: [Run on Kaggle](https://www.kaggle.com/code/your-username/your-notebook)
+- Kaggle: [Run on Kaggle](https://www.kaggle.com/code/ashendulanjaya/lab-03)
 
 ## Environment
 - Platform: Kaggle Notebook with GPU T4
