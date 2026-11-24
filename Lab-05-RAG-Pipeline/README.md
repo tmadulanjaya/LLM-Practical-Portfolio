@@ -54,18 +54,18 @@ Ollama must be running before starting the app.
 
 ## Screenshots
 ### Models installed
-![ollama list](./screenshots/01-ollama-list.png)
+![ollama list](./screenshots/ollama list.png)
 ### Ingestion
-![ingest](./screenshots/02-ingest.png)
+![ingest](./screenshots/ingest.png)
 ### Terminal chat
-![terminal chat](./screenshots/03-terminal-chat.png)
+![terminal chat](./screenshots/terminal chat.png)
 ### Streamlit app
-![streamlit answer](./screenshots/04-streamlit-answer.png)
+![streamlit answer](./screenshots/streamlit answer.png)
 ### Uploading a PDF
-![upload](./screenshots/05-upload-pdf.png)
-![answer from upload](./screenshots/06-answer-from-upload.png)
+![upload](./screenshots/upload.png)
+![answer from upload](./screenshots/answer from upload.png)
 ### Question not in the documents
-![not found](./screenshots/07-not-found.png)
+![not found](./screenshots/not found.png)
 
 ## Key Learnings
 - RAG grounds the LLM in your own documents, which reduces made-up answers.
