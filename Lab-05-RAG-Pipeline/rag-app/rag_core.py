@@ -1,4 +1,3 @@
-"""Core RAG logic shared by ingest.py, rag_pipeline.py and app.py."""
 from __future__ import annotations
 
 import hashlib

@@ -1,0 +1,6 @@
+StudentID,Name,Degree,Year,Email,Advisor,Status
+S001,Test Student,BSc Computer Science,2,student1@example.com,Dr. Perera,Active
+S002,Demo Student,BSc Software Engineering,3,student2@example.com,Dr. Silva,Active
+S003,Sample Student,BSc Computer Science,1,student3@example.com,Dr. Fernando,Active
+S004,Example Student,BSc Data Science,2,student4@example.com,Dr. Perera,On leave
+S005,Mock Student,BSc Software Engineering,4,student5@example.com,Dr. Silva,Active

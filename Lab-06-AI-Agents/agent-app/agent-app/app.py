@@ -1,4 +1,3 @@
-"""University AI Assistant - Streamlit UI.  Run: streamlit run app.py"""
 import streamlit as st
 
 import rag_core as rc

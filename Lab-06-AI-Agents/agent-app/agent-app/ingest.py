@@ -1,9 +1,3 @@
-"""Index every PDF in ./data into ChromaDB.
-
-Usage:
-    python ingest.py             # add new / changed PDFs (duplicates are skipped)
-    python ingest.py --reset     # wipe the database first
-"""
 import argparse
 import shutil
 

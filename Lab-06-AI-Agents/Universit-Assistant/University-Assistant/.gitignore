@@ -1,0 +1,6 @@
+rag_env/
+__pycache__/
+rag_index.pkl
+.env
+credentials.json
+token.json

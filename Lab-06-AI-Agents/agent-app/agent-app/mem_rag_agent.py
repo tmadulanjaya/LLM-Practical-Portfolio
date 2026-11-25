@@ -1,14 +1,3 @@
-"""
-PUSL 3205 - Lab 6, Parts B + C   (fixed version)
-Agent with:
-  - Short-term memory : recent conversation turns (kept in a Python list)
-  - Long-term memory  : facts about the user stored in SQLite (memory.db)
-  - Working memory    : messages + tool results for the current question
-Tools: calculator, search_student_memory, search_university_knowledge (RAG)
-
-Needs agent.py and rag_tool.py in the same folder, and rag_index.pkl built.
-Run:  python mem_rag_agent.py
-"""
 import re
 import json
 import sqlite3

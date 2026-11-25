@@ -1,4 +1,3 @@
-"""Terminal chat over the indexed documents.  Run: python rag_pipeline.py"""
 import rag_core as rc
 
 

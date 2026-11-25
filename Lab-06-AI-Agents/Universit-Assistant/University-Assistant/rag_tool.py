@@ -1,15 +1,3 @@
-"""
-PUSL 3205 - Lab 6, Part C: RAG search tool
-
-Install:
-    pip install pypdf langchain-text-splitters numpy langchain-ollama
-
-Step 1 (once, or whenever the PDFs change):
-    ollama pull qwen3-embedding:0.6b
-    python rag_tool.py build        # reads every PDF in ./data
-
-Step 2: import `search_university_knowledge` into your agent.
-"""
 import os
 import sys
 import pickle

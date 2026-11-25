@@ -1,5 +1,3 @@
-# University AI Assistant (RAG) - Setup
-
 ```powershell
 mkdir rag_test; cd rag_test            # copy these files in here
 py -3.12 -m venv rag_env

@@ -1,14 +1,3 @@
-"""
-PUSL 3205 - Lab 6, Part A + Multi-tool exercise
-Tool-using agent: Ollama (llama3.2:3b) + LangChain
-
-Install:
-    pip install langchain langchain-ollama pyautogui pygetwindow psutil
-Make sure Ollama is running and the model is pulled:
-    ollama list
-"""
-
-# 3. Import all the libraries
 import os
 import re
 import time

@@ -1,0 +1,531 @@
+{
+  "name": "University Assistant",
+  "nodes": [
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.5,
+      "position": [
+        1056,
+        -160
+      ],
+      "id": "0fb5eeb4-6a42-4385-b9b3-bbbb2b79b500",
+      "name": "When chat message received",
+      "webhookId": "5960b908-5316-4b02-98ca-a6a73296f655"
+    },
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "=You are the Intelligent University Assistant for students and staff. Today is {{ $now }} (timezone Asia/Colombo).\n\nTOOLS\n- search_university_info: for ANY question about courses, modules, programmes, policies or regulations. Answer ONLY from its result. If the result does not contain the answer, say you could not find it.\n- get_events: to check the calendar and available times.\n- create_event: to add a calendar event.\n- get_student / update_student: to read or change a student record by StudentID.\n- create_doc / update_doc: to write a document such as a letter or summary.\n- send_email: to send an email notification.\n\nAPPROVAL RULES\nBefore using create_event, update_student, create_doc or send_email, first tell the user exactly what you will do and ask \"Shall I go ahead? (yes/no)\". Only call the tool after the user answers yes. Never call these tools in the same turn as the proposal.\n\nRULES\n- Use ISO date-times with the +05:30 offset, for example 2026-11-15T14:00:00+05:30.\n- Ask for any missing detail instead of guessing.\n- After using a tool, tell the user briefly what happened.\n- Never make up student data or university information."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        1440,
+        -160
+      ],
+      "id": "f34ad486-79be-4c23-b64a-45a0f3bcac25",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": "qwen3:8b",
+        "options": {
+          "think": false,
+          "numCtx": 8192
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOllama",
+      "typeVersion": 1,
+      "position": [
+        1248,
+        64
+      ],
+      "id": "9323ed89-320d-4d5d-9a55-b0d98ce838e8",
+      "name": "Ollama Chat Model",
+      "credentials": {
+        "ollamaApi": {
+          "id": "QsYEXVJRyOvaud79",
+          "name": "Ollama account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "contextWindowLength": 10
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.4,
+      "position": [
+        1408,
+        64
+      ],
+      "id": "cd67e598-048e-4f86-9052-a86a70e5fde2",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "Get Google Calendar events for the next 7 days. Use this whenever the user asks about their schedule, availability or free times.",
+        "operation": "getAll",
+        "calendar": {
+          "__rl": true,
+          "value": "your@gmail.com",
+          "mode": "list",
+          "cachedResultName": "your@gmail.com"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleCalendarTool",
+      "typeVersion": 1.4,
+      "position": [
+        1728,
+        64
+      ],
+      "id": "50dca67d-48f8-401d-ad55-cba9ba1d12cc",
+      "name": "get_events",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "tCdl5BNOT8L51ZiW",
+          "name": "Google Calendar account 3"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "Create a new event in the user's Google Calendar. Use ONLY after the user has approved the details. Start and End are ISO date-times with the +05:30 offset.",
+        "calendar": {
+          "__rl": true,
+          "value": "your@gmail.com",
+          "mode": "list",
+          "cachedResultName": "your@gmail.com"
+        },
+        "start": "={{ $fromAI('Start', `Start date-time in ISO format with +05:30 offset, e.g. 2026-11-15T14:00:00+05:30`, 'string') }}",
+        "end": "={{ $fromAI('End', `End date-time in ISO format with +05:30 offset, one hour after the start unless told otherwise`, 'string') }}",
+        "additionalFields": {
+          "summary": "={{ $fromAI('Summary', `Short title of the event`, 'string') }}"
+        }
+      },
+      "type": "n8n-nodes-base.googleCalendarTool",
+      "typeVersion": 1.4,
+      "position": [
+        1888,
+        64
+      ],
+      "id": "4ac8ac9a-85ca-4052-97df-5d47fc9def07",
+      "name": "create_event",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "tCdl5BNOT8L51ZiW",
+          "name": "Google Calendar account 3"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1ghwqcQl7mx1Dzro-pAXxvZSArZdujjHyCpnncVhuehw",
+          "mode": "list",
+          "cachedResultName": "Student Records",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1ghwqcQl7mx1Dzro-pAXxvZSArZdujjHyCpnncVhuehw/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1619040998,
+          "mode": "list",
+          "cachedResultName": "student-records",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1ghwqcQl7mx1Dzro-pAXxvZSArZdujjHyCpnncVhuehw/edit#gid=1619040998"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.7,
+      "position": [
+        1584,
+        240
+      ],
+      "id": "e2eb604e-57d4-4bc7-b4ad-9e9c7b7253e3",
+      "name": "get_student",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "2aepbugUNKIkErEC",
+          "name": "Google Sheets account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "Update a student's Advisor and Status in the Student Records sheet. Use ONLY after the user has approved. First call get_student, then send the CURRENT value for any field that should not change.",
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1ghwqcQl7mx1Dzro-pAXxvZSArZdujjHyCpnncVhuehw",
+          "mode": "list",
+          "cachedResultName": "Student Records",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1ghwqcQl7mx1Dzro-pAXxvZSArZdujjHyCpnncVhuehw/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1619040998,
+          "mode": "list",
+          "cachedResultName": "student-records",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1ghwqcQl7mx1Dzro-pAXxvZSArZdujjHyCpnncVhuehw/edit#gid=1619040998"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "StudentID": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('StudentID__using_to_match_', ``, 'string') }}",
+            "Advisor": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Advisor', ``, 'string') }}",
+            "Status": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Status', ``, 'string') }}"
+          },
+          "matchingColumns": [
+            "StudentID"
+          ],
+          "schema": [
+            {
+              "id": "StudentID",
+              "displayName": "StudentID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Name",
+              "displayName": "Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Degree",
+              "displayName": "Degree",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Year",
+              "displayName": "Year",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Advisor",
+              "displayName": "Advisor",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.7,
+      "position": [
+        1728,
+        240
+      ],
+      "id": "566fe2ef-a602-44a8-bc47-91736445ce15",
+      "name": "update_student",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "2aepbugUNKIkErEC",
+          "name": "Google Sheets account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "folderId": "default",
+        "title": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Title', `Title of the document`, 'string') }}"
+      },
+      "type": "n8n-nodes-base.googleDocsTool",
+      "typeVersion": 2,
+      "position": [
+        1888,
+        240
+      ],
+      "id": "2cbdc597-261c-45ab-a0b8-bef8206e6c32",
+      "name": "create_doc",
+      "credentials": {
+        "googleDocsOAuth2Api": {
+          "id": "qXRN7zULMjgyhpEC",
+          "name": "Google Docs account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "Write text into an existing Google Doc. Pass the document ID returned by create_doc and the full text to insert.",
+        "operation": "update",
+        "documentURL": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Doc_ID_or_URL', `The ID of the document returned by create_doc`, 'string') }}",
+        "actionsUi": {
+          "actionFields": [
+            {
+              "action": "insert",
+              "text": "={{ $fromAI('Text', `The full text to write into the document`, 'string') }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.googleDocsTool",
+      "typeVersion": 2,
+      "position": [
+        2048,
+        240
+      ],
+      "id": "ff03cb82-2686-4a55-ab76-d6cb5f00e16f",
+      "name": "update_doc",
+      "credentials": {
+        "googleDocsOAuth2Api": {
+          "id": "qXRN7zULMjgyhpEC",
+          "name": "Google Docs account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "Send a message in Gmail",
+        "sendTo": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('To', `Recipient email address`, 'string') }}",
+        "subject": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Subject', `Email subject`, 'string') }}",
+        "emailType": "text",
+        "message": "={{ $fromAI('Message', `Plain text body of the email`, 'string') }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmailTool",
+      "typeVersion": 2.1,
+      "position": [
+        2048,
+        64
+      ],
+      "id": "6aacba0f-cc2c-4cc9-893a-ef5a6a2f7b46",
+      "name": "send_email",
+      "webhookId": "5041fcec-6cf8-4d84-ab49-761c35d16d66",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "op1m3fr7dZbGkeF6",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "toolDescription": "Search the university handbook (programmes, modules, policies). Use for ANY university question.",
+        "url": "http://host.docker.internal:8000/search",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "q",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', `the user question about the university`, 'string') }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.5,
+      "position": [
+        1568,
+        96
+      ],
+      "id": "b76235aa-0815-49c3-8936-63ba5ad2fa39",
+      "name": "search_university_info"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ollama Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "get_events": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "create_event": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "get_student": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "update_student": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "create_doc": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "update_doc": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "send_email": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "search_university_info": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "51af9557-e34a-43db-9d10-2574d58b71a6",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "a78764132fc5fda66c0d2c1d4e49e8d96bed95845d64a54958cd3e121d3a12fe"
+  },
+  "nodeGroups": [],
+  "id": "jwk11aNC0Wogc57e",
+  "tags": []
+}
